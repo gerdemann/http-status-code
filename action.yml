@@ -1,0 +1,36 @@
+# action.yml
+name: http-status-code
+author: Michael Gerdemann
+branding:
+  icon: activity
+  color: white
+description: "Wait for response code from a URL with timeout"
+inputs:
+  url:
+    description: "URL to poll"
+    required: true
+  code:
+    description: "The expected status code"
+    required: false
+    default: 200
+  timeout:
+    description: "Timeout before giving up in seconds"
+    required: false
+    default: 300
+  interval:
+    description: "Interval between polling in seconds"
+    required: false
+    default: 2
+outputs:
+  result:
+    description: "outputs the response from the call"
+runs:
+  using: "composite"
+  steps:
+    - id: main
+      run: |
+        timeout ${{inputs.timeout }} ${GITHUB_ACTION_PATH}/main.sh \
+        --code="${{ inputs.code }}" \
+        --url="${{ inputs.url }}" \
+        --interval="${{ inputs.interval }}"\
+      shell: bash
