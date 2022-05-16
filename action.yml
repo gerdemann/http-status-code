@@ -40,7 +40,7 @@ runs:
         timeout ${{inputs.timeout }} ${GITHUB_ACTION_PATH}/main.sh \
         --code="${{ inputs.code }}" \
         --url="${{ inputs.url }}" \
-        --username="${{ inputs.username }}"\
-        --password="${{ inputs.password }}"\
+        --username="${{ inputs.username }}" \
+        --password="${{ inputs.password }}" \
         --interval="${{ inputs.interval }}"\
       shell: bash
