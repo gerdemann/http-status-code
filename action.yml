@@ -21,6 +21,14 @@ inputs:
     description: "Interval between polling in seconds"
     required: false
     default: 2
+  username:
+    description: "Basic auth username"
+    required: false
+    default: ""
+  password:
+    description: "Basic auth password"
+    required: false
+    default: ""
 outputs:
   result:
     description: "outputs the response from the call"
@@ -33,4 +41,6 @@ runs:
         --code="${{ inputs.code }}" \
         --url="${{ inputs.url }}" \
         --interval="${{ inputs.interval }}"\
+        --username="${{ inputs.username }}"\
+        --password="${{ inputs.password }}"\
       shell: bash

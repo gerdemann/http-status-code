@@ -22,6 +22,14 @@ while test $# -gt 0; do
       code=`echo $1 | sed -e 's/^[^=]*=//g'`
       shift
       ;;
+    --username*)
+      username=`echo $1 | sed -e 's/^[^=]*=//g'`
+      shift
+      ;;
+    --password*)
+      password=`echo $1 | sed -e 's/^[^=]*=//g'`
+      shift
+      ;;
     --interval*)
       interval=`echo $1 | sed -e 's/^[^=]*=//g'`
       shift
@@ -35,6 +43,10 @@ done
 function poll_status {
   while true;
   do
+    auth=``
+    if [[ "$username" != "" ]]; then
+      auth=`-u $username:$password`
+    fi;
     STATUS_CODE=`curl -A "Web Check" -sL --connect-timeout 3 -w "%{http_code}\n" $url -o /dev/null`
     echo "$(date +%H:%M:%S): The status code is $STATUS_CODE";
     if [[ "$STATUS_CODE" == "200" ]]; then

@@ -25,9 +25,11 @@ jobs:
         uses: gerdemann/http-status-code@1.0.0
         with:
           url: https://github.com
-          code: 200
-          timeout: 60
-          interval: 10
+          code: 200 # optional
+          timeout: 60 # optional
+          interval: 10 # optional
+          username: ${{ secrets.USERNAME }} # optional
+          password: ${{ secrets.PASSWORD }} # optional
       # ... uses ....
 ```
 
@@ -39,3 +41,5 @@ The following configuration options are available:
 * `code` The HTTP status code (eg: 200)
 * `timeout` Timeout before giving up in seconds
 * `interval` Interval between polling in seconds
+* `username` Basic auth username
+* `password` Basic auth password
