@@ -12,7 +12,7 @@ inputs:
   code:
     description: "The expected status code"
     required: false
-    default: 200
+    default: '200'
   timeout:
     description: "Timeout before giving up in seconds"
     required: false
