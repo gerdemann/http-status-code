@@ -40,6 +40,7 @@ while test $# -gt 0; do
   esac
 done
 
+code="${code:-200}"
 auth_args=()
 if [[ -n "$username" ]]; then
   auth_args=(--user "$username:$password")
@@ -50,12 +51,11 @@ function poll_status {
   while true;
   do
     STATUS_CODE=$(curl -A "Web Check" -s --location-trusted --connect-timeout 3 -w "%{http_code}\n" "${auth_args[@]}" "$url" -o /dev/null)
-    echo "$(date +%H:%M:%S): The status code is $STATUS_CODE";
-    if [[ "$STATUS_CODE" == "200" ]]; then
-          echo "success";
-          exit 0;
-        break;
-    fi;
+    echo "$(date +%H:%M:%S): The status code is $STATUS_CODE"
+    if [[ "$STATUS_CODE" == "$code" ]]; then
+      echo "success"
+      exit 0
+    fi
     sleep $interval;
   done
 }
