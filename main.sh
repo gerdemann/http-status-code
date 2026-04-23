@@ -40,14 +40,16 @@ while test $# -gt 0; do
   esac
 done
 
+auth_args=()
+if [[ -n "$username" ]]; then
+  auth_args=(--user "$username:$password")
+  echo "Basic Authentication enabled."
+fi
+
 function poll_status {
   while true;
   do
-    auth=""
-    if [[ "$username" != "" ]]; then
-      auth="-u $username:$password"
-    fi;
-    STATUS_CODE=`curl -A "Web Check" -sL --connect-timeout 3 -w "%{http_code}\n" $auth $url -o /dev/null`
+    STATUS_CODE=$(curl -A "Web Check" -s --location-trusted --connect-timeout 3 -w "%{http_code}\n" "${auth_args[@]}" "$url" -o /dev/null)
     echo "$(date +%H:%M:%S): The status code is $STATUS_CODE";
     if [[ "$STATUS_CODE" == "200" ]]; then
           echo "success";
