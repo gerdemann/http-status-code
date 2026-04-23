@@ -8,26 +8,29 @@ while test $# -gt 0; do
       echo "./main.sh [options]"
       echo " "
       echo "options:"
-      echo "-h, --help           Show brief help"
-      echo "--url=URL            url to poll"
-      echo "--interval=INTERVAL  Interval between each call, in seconds"
-      echo "--timeout=TIMEOUT    Timeout before stop polling, in seconds"
+      echo "-h, --help                    Show brief help"
+      echo "--url=URL                     URL to poll"
+      echo "--code=CODE                   Expected HTTP status code (default: 200)"
+      echo "--username=USERNAME           Basic Auth username"
+      echo "--password=PASSWORD           Basic Auth password"
+      echo "--interval=INTERVAL           Interval between each call, in seconds"
+      echo "--timeout=TIMEOUT             Timeout before stop polling, in seconds"
       exit 0
       ;;
     --url*)
-      url=`echo $1 | sed -e 's/^[^=]*=//g'`
+      url=$(echo "$1" | sed -e 's/^[^=]*=//g')
       shift
       ;;
     --code*)
-      code=`echo $1 | sed -e 's/^[^=]*=//g'`
+      code=$(echo "$1" | sed -e 's/^[^=]*=//g')
       shift
       ;;
     --username*)
-      username=`echo $1 | sed -e 's/^[^=]*=//g'`
+      username=$(echo "$1" | sed -e 's/^[^=]*=//g')
       shift
       ;;
     --password*)
-      password=`echo $1 | sed -e 's/^[^=]*=//g'`
+      password=$(echo "$1" | sed -e 's/^[^=]*=//g')
       shift
       ;;
     --interval*)
