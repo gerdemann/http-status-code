@@ -16,11 +16,11 @@ inputs:
   timeout:
     description: "Timeout before giving up in seconds"
     required: false
-    default: 300
+    default: '300'
   interval:
     description: "Interval between polling in seconds"
     required: false
-    default: 2
+    default: '2'
   username:
     description: "Basic auth username"
     required: false
@@ -37,10 +37,11 @@ runs:
   steps:
     - id: main
       run: |
-        timeout ${{inputs.timeout }} ${GITHUB_ACTION_PATH}/main.sh \
+        ${GITHUB_ACTION_PATH}/main.sh \
         --code="${{ inputs.code }}" \
         --url="${{ inputs.url }}" \
         --username="${{ inputs.username }}" \
         --password="${{ inputs.password }}" \
         --interval="${{ inputs.interval }}"\
+        --timeout="${{ inputs.timeout }}"\
       shell: bash
