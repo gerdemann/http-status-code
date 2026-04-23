@@ -31,7 +31,11 @@ while test $# -gt 0; do
       shift
       ;;
     --interval*)
-      interval=`echo $1 | sed -e 's/^[^=]*=//g'`
+      interval=$(echo "$1" | sed -e 's/^[^=]*=//g')
+      shift
+      ;;
+    --timeout*)
+      timeout=$(echo "$1" | sed -e 's/^[^=]*=//g')
       shift
       ;;
     *)
@@ -41,6 +45,11 @@ while test $# -gt 0; do
 done
 
 code="${code:-200}"
+interval="${interval//[^0-9]/}"
+interval="${interval:-10}"
+timeout="${timeout//[^0-9]/}"
+timeout="${timeout:-300}"
+
 auth_args=()
 if [[ -n "$username" ]]; then
   auth_args=(--user "$username:$password")
@@ -48,17 +57,22 @@ if [[ -n "$username" ]]; then
 fi
 
 function poll_status {
-  while true;
-  do
+  local elapsed=0
+  while true; do
     STATUS_CODE=$(curl -A "Web Check" -s --location-trusted --connect-timeout 3 -w "%{http_code}\n" "${auth_args[@]}" "$url" -o /dev/null)
     echo "$(date +%H:%M:%S): The status code is $STATUS_CODE"
     if [[ "$STATUS_CODE" == "$code" ]]; then
       echo "success"
       exit 0
     fi
-    sleep $interval;
+    if (( elapsed >= timeout )); then
+      echo "Timeout after ${timeout}s waiting for status $code on ${url%\?*}"
+      exit 1
+    fi
+    sleep "$interval"
+    (( elapsed += interval ))
   done
 }
 
-printf "\nPolling '${url%\?*}' every $interval seconds, until status is '200'\n"
+printf "\nPolling '${url%\?*}' every ${interval}s, timeout ${timeout}s, until status is '${code}'\n"
 poll_status
